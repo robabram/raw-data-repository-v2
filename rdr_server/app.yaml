@@ -1,0 +1,19 @@
+#
+# This file is subject to the terms and conditions defined in the
+# file 'LICENSE', which is part of this source code package.
+#
+# Docs: https://cloud.google.com/appengine/docs/standard/python/config/appref
+#
+
+runtime: python37
+service: py37test
+
+inbound_services:
+- warmup
+
+# Patterns for files within rest-api that we do not want to deploy to AppEngine
+skip_files:
+- ^venv/.*$
+
+env_variables:
+  GCP_PROJECT: 'all-of-us-local'
