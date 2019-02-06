@@ -14,7 +14,7 @@ pip-tools
 
 ## web service
 flask
-flask-restful
+flask-restplus
 backoff
 oauth2client
 cryptography
@@ -33,6 +33,7 @@ fhirclient
 
 ## misc
 dnspython
+simplejson
 
 ## unit testing
 mock

@@ -5,5 +5,5 @@
 
 from rdr_server.config.defaults import *
 
-mysql.connection = 'crap'
+db.connection = 'crap'
 
