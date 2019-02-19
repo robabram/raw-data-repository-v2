@@ -8,6 +8,7 @@ from rdr_server.dao.codebook import CodeBookDao
 
 api = Namespace('cats', description='Cats related operations')
 
+# TODO: How do we get the sqlalchemy model into the api.model?
 cat = api.model('Cat', {
     'id': fields.String(required=True, description='The cat identifier'),
     'name': fields.String(required=True, description='The cat name'),
@@ -17,7 +18,8 @@ CATS = [
     {'id': 'felix', 'name': 'Felix'},
 
 ]
-
+# https://flask-restplus.readthedocs.io/en/stable/quickstart.html
+# https://blog.miguelgrinberg.com/post/designing-a-restful-api-using-flask-restful
 
 @api.route('/')
 class CatList(Resource):

@@ -2,7 +2,7 @@
 # This file is subject to the terms and conditions defined in the
 # file 'LICENSE', which is part of this source code package.
 #
-from rdr_server import app
+from rdr_server.server import app
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
