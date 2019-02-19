@@ -3,10 +3,10 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
 
 from rdr_server.common.system_enums import BiobankOrderStatus
-from rdr_server.model.base_model import BaseModel, UTCDateTime
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
 
 
-class BiobankOrderBase(object):
+class BiobankOrderBase(ModelMixin):
     """An order requesting samples.
 
     The order contains a list of samples stored in BiobankOrderedSample; the actual delivered and
@@ -57,14 +57,14 @@ class BiobankOrderBase(object):
     cancelledTime = Column('cancelled_time', UTCDateTime)
 
     # Additional fields stored for future use.
-    created = Column('created', UTCDateTime, nullable=False)
+    # created = Column('created', UTCDateTime, nullable=False)
     collectedNote = Column('collected_note', UnicodeText)
     processedNote = Column('processed_note', UnicodeText)
     finalizedNote = Column('finalized_note', UnicodeText)
 
     @declared_attr
     def participantId(cls):
-        return Column('participant_id', Integer, ForeignKey(
+        return Column('participant_id', String(20), ForeignKey(
             'participant.participant_id'), nullable=False)
 
     @declared_attr
@@ -112,13 +112,15 @@ class BiobankOrderBase(object):
 
 
 class BiobankOrder(BiobankOrderBase, BaseModel):
+
     __tablename__ = 'biobank_order'
+
     logPosition = relationship('LogPosition')
     identifiers = relationship('BiobankOrderIdentifier', cascade='all, delete-orphan')
     samples = relationship('BiobankOrderedSample', cascade='all, delete-orphan')
 
 
-class BiobankOrderIdentifierBase(object):
+class BiobankOrderIdentifierBase(ModelMixin):
     system = Column('system', String(80))
     value = Column('value', String(80))
 
@@ -140,7 +142,7 @@ class BiobankOrderIdentifier(BiobankOrderIdentifierBase, BaseModel):
     __tablename__ = 'biobank_order_identifier'
 
 
-class BiobankOrderedSampleBase(object):
+class BiobankOrderedSampleBase(ModelMixin):
     @declared_attr
     def biobankOrderId(cls):
         return Column(

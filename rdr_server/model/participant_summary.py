@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 from rdr_server.common.system_enums import EnrollmentStatus, Race, SampleStatus, OrderStatus, \
     PhysicalMeasurementsStatus, QuestionnaireStatus, WithdrawalStatus, SuspensionStatus, \
     WithdrawalReason
-from rdr_server.model.base_model import BaseModel, UTCDateTime
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
 
 # The only fields that can be returned, queried on, or ordered by for queries for withdrawn
 # participants.
@@ -31,7 +31,7 @@ SUSPENDED_PARTICIPANT_FIELDS = ['zipCode', 'city', 'streetAddress', 'phoneNumber
                                 'loginPhoneNumber', 'email']
 
 
-class ParticipantSummary(BaseModel):
+class ParticipantSummary(ModelMixin, BaseModel):
     """Summary fields extracted from participant data (combined from multiple tables).
     Consented participants only."""
     __tablename__ = 'participant_summary'

@@ -2,10 +2,10 @@ from sqlalchemy import Column, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
 from rdr_server.common.system_enums import OrganizationType, ObsoleteStatus
-from rdr_server.model.base_model import BaseModel
+from rdr_server.model.base_model import BaseModel, ModelMixin
 
 
-class HPO(BaseModel):
+class HPO(ModelMixin, BaseModel):
     """An awardee, containing organizations (which in turn contain sites.)"""
     __tablename__ = 'hpo'
 

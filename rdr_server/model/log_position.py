@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer
 
-from rdr_server.model.base_model import BaseModel
+from rdr_server.model.base_model import BaseModel, ModelMixin
 
 
-class LogPosition(BaseModel):
+class LogPosition(ModelMixin, BaseModel):
     """A position in a log, incremented whenever writes to particular tables occur.
 
     This is for syncing changes to other clients. (We don't use timestamps, since timestamps in SQL

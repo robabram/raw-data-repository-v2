@@ -3,11 +3,11 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import backref, relationship
 
-from rdr_server.model.base_model import BaseModel, UTCDateTime
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
 from rdr_server.common.system_enums import CodeType
 
 
-class CodeBook(BaseModel):
+class CodeBook(ModelMixin, BaseModel):
     """A book of codes.
 
     Code books contain a list of codes that are referenced in questionnaire concepts,
@@ -21,7 +21,7 @@ class CodeBook(BaseModel):
     """
     __tablename__ = 'code_book'
     codeBookId = Column('code_book_id', Integer, unique=True)
-    created = Column('created', UTCDateTime, nullable=False)
+    # created = Column('created', UTCDateTime, nullable=False)
     # True if this is the latest imported code book.
     latest = Column('latest', Boolean, nullable=False)
     name = Column('name', String(80), nullable=False)
@@ -33,7 +33,7 @@ class CodeBook(BaseModel):
     )
 
 
-class _CodeBase(object):
+class _CodeBase(ModelMixin):
     """Mixin with shared columns for Code and CodeHistory"""
     codeId = Column('code_id', Integer, unique=True)
     system = Column('system', String(255), nullable=False)
@@ -46,7 +46,7 @@ class _CodeBase(object):
     topic = Column('topic', UnicodeText)
     codeType = Column('code_type', Enum(CodeType), nullable=False)
     mapped = Column('mapped', Boolean, nullable=False)
-    created = Column('created', UTCDateTime, nullable=False)
+    # created = Column('created', UTCDateTime, nullable=False)
 
     @declared_attr
     def codeBookId(cls):

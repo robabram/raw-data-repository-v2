@@ -3,10 +3,10 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
 
 from rdr_server.common.system_enums import WithdrawalStatus, SuspensionStatus, WithdrawalReason
-from rdr_server.model.base_model import BaseModel, UTCDateTime
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
 
 
-class ParticipantBase(object):
+class ParticipantBase(ModelMixin):
     """Mixin with shared columns for Participant and ParticipantHistory"""
 
     # Randomly assigned internal ID. We tack 'P' on the front whenever we use this externally.

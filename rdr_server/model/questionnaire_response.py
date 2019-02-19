@@ -2,10 +2,10 @@ from sqlalchemy import Column, Integer, Date, ForeignKey, String, Boolean, JSON
 from sqlalchemy import ForeignKeyConstraint, Float, Text
 from sqlalchemy.orm import relationship
 
-from rdr_server.model.base_model import BaseModel, UTCDateTime
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
 
 
-class QuestionnaireResponse(BaseModel):
+class QuestionnaireResponse(ModelMixin, BaseModel):
     """"A response to a questionnaire for a participant. Contains answers to questions found in the
     questionnaire."""
     __tablename__ = 'questionnaire_response'
@@ -13,19 +13,19 @@ class QuestionnaireResponse(BaseModel):
     questionnaireResponseId = Column('questionnaire_response_id', Integer, unique=True)
     questionnaireId = Column('questionnaire_id', Integer, nullable=False)
     questionnaireVersion = Column('questionnaire_version', Integer, nullable=False)
-    participantId = Column('participant_id', Integer, ForeignKey('participant.participant_id'),
+    participantId = Column('participant_id', String(20), ForeignKey('participant.participant_id'),
                            nullable=False)
-    created = Column('created', UTCDateTime, nullable=False)
+    # created = Column('created', UTCDateTime, nullable=False)
     resource = Column('resource', JSON, nullable=False)
     answers = relationship('QuestionnaireResponseAnswer', cascade='all, delete-orphan')
-    __table_args__ = (
-        ForeignKeyConstraint(['questionnaire_id', 'questionnaire_version'],
-                             ['questionnaire_history.questionnaire_id',
-                              'questionnaire_history.version']),
-    )
+    # __table_args__ = (
+    #     ForeignKeyConstraint(
+    #         ('questionnaire_id', 'questionnaire_version'),
+    #         ('questionnaire_history.questionnaire_id', 'questionnaire_history.version')),
+    # )
 
 
-class QuestionnaireResponseAnswer(BaseModel):
+class QuestionnaireResponseAnswer(ModelMixin, BaseModel):
     """An answer found in a questionnaire response. Note that there could be multiple answers to
     the same question, if the questionnaire allows for multiple answers.
 

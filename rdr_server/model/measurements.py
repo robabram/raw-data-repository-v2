@@ -2,7 +2,7 @@ from sqlalchemy import Column, Boolean, Integer, BLOB, BIGINT, ForeignKey, Strin
     Text, UnicodeText, Enum
 from sqlalchemy.orm import relationship
 
-from rdr_server.model.base_model import BaseModel, UTCDateTime
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
 from rdr_server.common.system_enums import PhysicalMeasurementsStatus
 
 measurement_to_qualifier = Table('measurement_to_qualifier', BaseModel.metadata,
@@ -13,13 +13,13 @@ measurement_to_qualifier = Table('measurement_to_qualifier', BaseModel.metadata,
                                  )
 
 
-class PhysicalMeasurements(BaseModel):
+class PhysicalMeasurements(ModelMixin, BaseModel):
     __tablename__ = 'physical_measurements'
     physicalMeasurementsId = Column('physical_measurements_id', Integer, unique=True,
                                     autoincrement=False)
-    participantId = Column('participant_id', Integer, ForeignKey('participant.participant_id'),
+    participantId = Column('participant_id', String(20), ForeignKey('participant.participant_id'),
                            nullable=False)
-    created = Column('created', UTCDateTime, nullable=False)
+    # created = Column('created', UTCDateTime, nullable=False)
     resource = Column('resource', BLOB, nullable=False)
     final = Column('final', Boolean, nullable=False)
     # The ID that these measurements are an amendment of (points from new to old)
@@ -46,7 +46,7 @@ class PhysicalMeasurements(BaseModel):
     measurements = relationship('Measurement', cascade='all, delete-orphan')
 
 
-class Measurement(BaseModel):
+class Measurement(ModelMixin, BaseModel):
     """An individual measurement; child of PhysicalMeasurements."""
     __tablename__ = 'measurement'
     # Note: measurementId will be physicalMeasurementsId * 100 + an index. (This way we don't have to

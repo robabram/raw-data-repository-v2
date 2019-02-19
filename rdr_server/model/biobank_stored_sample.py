@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 
-from rdr_server.model.base_model import BaseModel, UTCDateTime
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
 from rdr_server.common.system_enums import SampleStatus
 
 
-class BiobankStoredSample(BaseModel):
+class BiobankStoredSample(ModelMixin, BaseModel):
     """Physical sampels which have been reported as received at Biobank.
 
     Each participant has an associated list of samples. Biobank uploads a list of all received
@@ -58,7 +58,7 @@ class BiobankStoredSample(BaseModel):
     confirmed = Column('confirmed', UTCDateTime)
 
     # Timestamp when Biobank received / created the sample.
-    created = Column('created', UTCDateTime)
+    # created = Column('created', UTCDateTime)
 
     # sample status, includes all the statuses from SampleStatus Enum.
     status = Column('status', Enum(SampleStatus), default=SampleStatus.RECEIVED)

@@ -1,10 +1,10 @@
 from rdr_server.common.system_enums import SiteStatus, EnrollingStatus, DigitalSchedulingStatus, ObsoleteStatus
 from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, UnicodeText, Enum
 
-from rdr_server.model.base_model import BaseModel
+from rdr_server.model.base_model import BaseModel, ModelMixin
 
 
-class Site(BaseModel):
+class Site(ModelMixin, BaseModel):
     __tablename__ = 'site'
 
     siteId = Column('site_id', Integer, unique=True)

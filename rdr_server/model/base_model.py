@@ -4,11 +4,20 @@ tables. Extend MetricsBase for all metrics tables."""
 import json
 
 from dateutil.tz import tzutc
-from sqlalchemy import MetaData, Column, BigInteger, text, Table
+from sqlalchemy import MetaData, Column, BigInteger, text
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.dialects.mysql import DATETIME
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.types import TypeDecorator
+
+
+# Do not use the cls=xxxx parameter, create a mixin class and add them directly
+# to the models.
+BaseModel = declarative_base(metadata=MetaData(schema='rdrv2'))
+
+# MetricsBase is the parent for all models in the "metrics" DB. These are
+# collected separately for DB migration purposes.
+BaseMetricsModel = declarative_base(metadata=MetaData(schema='metricsv2'))
 
 
 class UTCDateTime(TypeDecorator):
@@ -24,7 +33,7 @@ class UTCDateTime(TypeDecorator):
         return value
 
 
-class BaseModelMixIn(object):
+class ModelMixin(object):
     """
     Base Mixin for all models. Includes methods for importing/exporting JSON data.
     """
@@ -94,13 +103,6 @@ class BaseModelMixIn(object):
             ol.append(cls(data[x]))
 
         return ol
-
-
-BaseModel = declarative_base(cls=BaseModelMixIn, metadata=MetaData(schema='rdrv2'))
-
-# MetricsBase is the parent for all models in the "metrics" DB. These are
-# collected separately for DB migration purposes.
-BaseMetricsModel = declarative_base(cls=BaseModelMixIn, metadata=MetaData(schema='metricsv2'))
 
 
 def get_column_name(model_type, field_name):
