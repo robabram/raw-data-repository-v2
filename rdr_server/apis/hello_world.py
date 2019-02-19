@@ -4,6 +4,7 @@
 #
 
 from flask_restplus import Namespace, Resource, fields
+from rdr_server.dao.codebook import CodeBookDao
 
 api = Namespace('cats', description='Cats related operations')
 
@@ -27,11 +28,19 @@ class CatList(Resource):
         return CATS
 
 
+@api.route('/count')
+class CatCount(Resource):
+    def get(self):
+        dao = CodeBookDao()
+        count = dao.count()
+        return {'count': count}
+
+
 @api.route('/<id>')
 @api.param('id', 'The cat identifier')
 @api.response(404, 'Cat not found')
 class Cat(Resource):
-    @api.doc('get_cat')
+    # @api.doc('get_cat')
     @api.marshal_with(cat)
     def get(self, id):
         """Fetch a cat given its identifier"""

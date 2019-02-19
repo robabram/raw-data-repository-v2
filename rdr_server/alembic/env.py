@@ -10,7 +10,7 @@ from sqlalchemy import pool
 from rdr_server.model.base_model import BaseModel, BaseMetricsModel
 
 # Importing this is what gets our model available for Alembic.
-import rdr_server.model.database  # pylint: disable=unused-import
+import rdr_server.model.base_database  # pylint: disable=unused-import
 
 logger = logging.getLogger('alembic')
 

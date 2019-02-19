@@ -8,6 +8,7 @@ from flask_restplus import Api, Resource
 
 # import api namespaces
 from rdr_server.apis.hello_world import api as ns1
+from rdr_server.apis.internal import api as ns2
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
@@ -16,6 +17,7 @@ api = Api(app)
 
 # Add name spaces
 api.add_namespace(ns1)
+api.add_namespace(ns2)
 
 
 @api.route('/_ah/warmup')

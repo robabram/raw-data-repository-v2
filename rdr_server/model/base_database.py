@@ -4,6 +4,7 @@ import backoff
 from sqlalchemy import create_engine
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.session import Session
 
 from rdr_server.model.base_model import BaseModel, BaseMetricsModel
 
@@ -40,9 +41,9 @@ class Database(object):
         # connections after this period. (See DA-237.) To change the db wait_timeout (seconds), run:
         # gcloud --project <proj> sql instances patch rdrmaindb --database-flags wait_timeout=28800
         self._engine = create_engine(url, pool_pre_ping=True, pool_recycle=3600, **kwargs)
-        self.db_type = url.drivername
-        if self.db_type == 'sqlite':
-            self._engine.execute('PRAGMA foreign_keys = ON;')
+        # self.db_type = url.drivername
+        # if self.db_type == 'sqlite':
+        #     self._engine.execute('PRAGMA foreign_keys = ON;')
         # expire_on_commit = False allows us to access model objects outside of a transaction.
         # It also means that after a commit, a model object won't read from the database for its
         # properties. (Which should be fine.)
@@ -57,11 +58,11 @@ class Database(object):
     def create_metrics_schema(self):
         BaseMetricsModel.metadata.create_all(self._engine)
 
-    def make_session(self):
+    def make_session(self) -> Session:
         return self._Session()
 
     @contextmanager
-    def session(self):
+    def session(self) -> Session:
         sess = self.make_session()
         try:
             yield sess
