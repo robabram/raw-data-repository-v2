@@ -46,11 +46,11 @@ class UTCDateTime(TypeDecorator):
 
 
 BaseApiSchema = Model('BaseSchema', {
-    'status': fields.String(readonly=True),
-    'error': fields.String(readonly=True),
+    # 'status': fields.String(readonly=True),
+    # 'error': fields.String(readonly=True),
     'pkId': fields.Integer(readonly=True),
-    'created': fields.DateTime(readonly=True),
-    'modified': fields.DateTime(readonly=True)
+    'created': fields.DateTime(dt_format='iso8601', readonly=True),
+    'modified': fields.DateTime(dt_format='iso8601', readonly=True)
 })
 
 

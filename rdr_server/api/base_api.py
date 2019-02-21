@@ -5,28 +5,29 @@
 from collections import OrderedDict
 from datetime import date, datetime
 
-from flask import abort
-from flask_restplus import Resource, Model, fields
+from flask import Response, abort
+from flask_restplus import Resource
 from sqlalchemy.exc import IntegrityError
 
-from rdr_server.model.base_model import ModelMixin
 from rdr_server.dao.exceptions import RecordNotFoundError
+from rdr_server.model.base_model import ModelMixin
 
 
 def response_handler(func):
     """
     A decorator to handle exceptions processing a response
     """
+
     def f(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        #TODO: Log exceptions
+        # TODO: Log exceptions
         except IntegrityError:
-            return {'error': 'duplicate'}, 409
+            abort(409, 'duplicate')
         except RecordNotFoundError:
-            return {'error': 'not found'}, 404
+            abort(404, 'not found')
         except Exception:
-            return {'error': 'unknown'}, 500
+            abort(500, 'server error')
 
     return f
 
@@ -131,6 +132,7 @@ class BaseApiPK(BaseApiModel):
     """
     Handle all operations using the primary key id
     """
+
     def get(self, pk_id):
         rec = self.model.get_by_id(pk_id)
         if not rec:
