@@ -29,8 +29,8 @@ google-cloud-bigquery
 mysqlclient
 sqlalchemy
 alembic
+marshmallow-sqlalchemy
 fhirclient
-# dictalchemy
 
 ## misc
 dnspython

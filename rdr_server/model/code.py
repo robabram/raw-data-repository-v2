@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, UnicodeText, Boolean, UniqueCons
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import backref, relationship
+from marshmallow_sqlalchemy import ModelSchema
 
 from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
 from rdr_server.common.system_enums import CodeType

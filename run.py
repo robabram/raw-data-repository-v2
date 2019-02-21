@@ -3,6 +3,8 @@
 # file 'LICENSE', which is part of this source code package.
 #
 
+# This may be an unused file.
+
 import os
 import sys
 

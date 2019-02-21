@@ -2,14 +2,18 @@
 tables. Extend MetricsBase for all metrics tables."""
 
 import json
+from collections import OrderedDict
+from datetime import date, datetime
 
 from dateutil.tz import tzutc
+from flask_restplus import Model, fields
+from marshmallow import Schema
 from sqlalchemy import MetaData, Column, BigInteger, text
-from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy import inspect
 from sqlalchemy.dialects.mysql import DATETIME
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.types import TypeDecorator
-
 
 # Do not use the cls=xxxx parameter, create a mixin class and add them directly
 # to the models.
@@ -18,6 +22,14 @@ BaseModel = declarative_base(metadata=MetaData(schema='rdrv2'))
 # MetricsBase is the parent for all models in the "metrics" DB. These are
 # collected separately for DB migration purposes.
 BaseMetricsModel = declarative_base(metadata=MetaData(schema='metricsv2'))
+
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    return obj.__repr__()
 
 
 class UTCDateTime(TypeDecorator):
@@ -33,10 +45,21 @@ class UTCDateTime(TypeDecorator):
         return value
 
 
+BaseApiSchema = Model('BaseSchema', {
+    'status': fields.String(readonly=True),
+    'error': fields.String(readonly=True),
+    'pkId': fields.Integer(readonly=True),
+    'created': fields.DateTime(readonly=True),
+    'modified': fields.DateTime(readonly=True)
+})
+
+
 class ModelMixin(object):
     """
     Base Mixin for all models. Includes methods for importing/exporting JSON data.
     """
+
+    __marshmallow__: Schema()
 
     @declared_attr
     def __tablename__(cls):
@@ -73,22 +96,26 @@ class ModelMixin(object):
         Dump class to json string
         :return: json string
         """
-        data = self.__dict__.copy()
-        for key in self.__dict__:
-            if key.startswith('_'):
-                data.pop(key)
-
-        return json.dumps(data, default=lambda o: o.__dict__, sort_keys=True, indent=2)
+        data = self.to_dict()
+        return json.dumps(data, default=json_serial)
 
     def to_dict(self):
         """
         Dump class to python dict
         :return: dict
         """
-        data = dict()
-        for key, value in self.__dict__.items():
-            if not key.startswith("_") and value is not None:
+        data = OrderedDict()
+        mapper = inspect(self)
+
+        for column in mapper.attrs:
+            key = str(column.key)
+            value = getattr(self, key)
+
+            if isinstance(value, (datetime, date)):
+                data[key] = value.isoformat()
+            else:
                 data[key] = value
+
         return data
 
     def dict_to_obj_array(self, cls, data):

@@ -173,6 +173,7 @@ class BiobankOrderedSample(BiobankOrderedSampleBase, BaseModel):
 
 
 class BiobankOrderHistory(BiobankOrderBase, BaseModel):
+
     __tablename__ = 'biobank_history'
 
     version = Column('version', Integer, unique=True)

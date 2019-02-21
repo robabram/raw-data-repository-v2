@@ -31,13 +31,13 @@ class Questionnaire(QuestionnaireBase, BaseModel):
     """
     __tablename__ = 'questionnaire'
 
-    concepts = relationship(
-        'QuestionnaireConcept', cascade='expunge', cascade_backrefs=False,
-        primaryjoin='Questionnaire.questionnaireId==foreign(QuestionnaireConcept.questionnaireId)')
-
-    questions = relationship(
-        'QuestionnaireQuestion', cascade='expunge', cascade_backrefs=False,
-        primaryjoin='Questionnaire.questionnaireId==foreign(QuestionnaireQuestion.questionnaireId)')
+    # concepts = relationship(
+    #     'QuestionnaireConcept', cascade='expunge', cascade_backrefs=False,
+    #     primaryjoin='Questionnaire.questionnaireId==foreign(QuestionnaireConcept.questionnaireId)')
+    #
+    # questions = relationship(
+    #     'QuestionnaireQuestion', cascade='expunge', cascade_backrefs=False,
+    #     primaryjoin='Questionnaire.questionnaireId==foreign(QuestionnaireQuestion.questionnaireId)')
 
 
 class QuestionnaireHistory(QuestionnaireBase, BaseModel):
@@ -45,8 +45,8 @@ class QuestionnaireHistory(QuestionnaireBase, BaseModel):
 
     # questionnaireFk = Column('questionnaire_fk', BigInteger, ForeignKey("questionnaire.id"), nullable=False)
     version = Column('version', Integer, unique=True)
-    concepts = relationship('QuestionnaireConcept', cascade='all, delete-orphan')
-    questions = relationship('QuestionnaireQuestion', cascade='all, delete-orphan')
+    # concepts = relationship('QuestionnaireConcept', cascade='all, delete-orphan')
+    # questions = relationship('QuestionnaireQuestion', cascade='all, delete-orphan')
 
 
 class QuestionnaireConcept(ModelMixin, BaseModel):

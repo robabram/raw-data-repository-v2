@@ -14,6 +14,7 @@ api = Namespace('internal', description='Internal related operations')
 
 
 @api.route('/ImportCodeBook')
+@api.hide
 class CodeBook(Resource):
     def post(self):
 
