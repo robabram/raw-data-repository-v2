@@ -19,6 +19,7 @@ from rdr_server.api.calendar import api as ns3
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
 app = Flask(__name__)
+app.config['ERROR_404_HELP'] = False
 api = Api(app, version='0.1', title='A good test', description='A simple API test')
 
 # Add name spaces
