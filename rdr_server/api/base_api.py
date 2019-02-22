@@ -44,13 +44,13 @@ def user_auth(f):
 
 
 class BaseApiModel(Resource):
-    model = None
+    dao = None
 
-    def response(self, data=None):
+    def to_dict(self, data=None):
         """
-        Format the model data into json
-        :param data: model data
-        :return: string
+        Convert sqlalchemy models/result objects into a python dict
+        :param data: Result data
+        :return: dict
         """
         if not data or (isinstance(data, list) and len(data) == 0):
             return dict()
@@ -95,7 +95,7 @@ class BaseApiCount(BaseApiModel):
         Return the count of all recors in the table
         :return: integer
         """
-        return {'count': self.model.count()}
+        return {'count': self.dao.count()}
 
 
 class BaseApiList(BaseApiModel):
@@ -108,8 +108,8 @@ class BaseApiList(BaseApiModel):
         Return all the records from the table
         :return: return list
         """
-        data = self.model.list()
-        response = self.response(data)
+        data = self.dao.list()
+        response = self.to_dict(data)
         return response
 
 
@@ -123,8 +123,8 @@ class BaseApiSync(BaseApiModel):
         Return the basic record information for all records.
         :return: return list
         """
-        data = self.model.base_fields()
-        response = self.response(data)
+        data = self.dao.base_fields()
+        response = self.to_dict(data)
         return response
 
 
@@ -134,16 +134,16 @@ class BaseApiPK(BaseApiModel):
     """
 
     def get(self, pk_id):
-        rec = self.model.get_by_id(pk_id)
+        rec = self.dao.get_by_id(pk_id)
         if not rec:
             raise RecordNotFoundError()
         return rec.to_dict(), 200
 
     def delete(self, pk_id):
-        rec = self.model.get_by_id(pk_id)
+        rec = self.dao.get_by_id(pk_id)
         if not rec:
             raise RecordNotFoundError()
-        self.model.delete_by_id(pk_id)
+        self.dao.delete_by_id(pk_id)
         return {'status': 'deleted'}, 202
 
     # TODO: add PUT method

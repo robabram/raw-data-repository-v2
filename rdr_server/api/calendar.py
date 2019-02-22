@@ -14,17 +14,17 @@ api.models[CalendarApiSchema.name] = CalendarApiSchema
 
 @api.route('/count')
 class CalendarApiCount(BaseApiCount):
-    model = BaseDao(Calendar)
+    dao = BaseDao(Calendar)
 
 
 @api.route('/sync')
 class CalendarApiSync(BaseApiSync):
-    model = BaseDao(Calendar)
+    dao = BaseDao(Calendar)
 
 
 @api.route('/')
 class CalendarApiList(BaseApiList):
-    model = BaseDao(Calendar)
+    dao = BaseDao(Calendar)
 
     @api.doc('create_calendar')
     @api.expect(CalendarApiSchema)
@@ -33,14 +33,14 @@ class CalendarApiList(BaseApiList):
     def post(self):
         calendar = Calendar(**api.payload)
 
-        with self.model.session() as session:
+        with self.dao.session() as session:
             session.add(calendar)
             session.commit()
 
             # reload calendar record
-            calendar = self.model.get_by_id(calendar.pkId)
+            calendar = self.dao.get_by_id(calendar.pkId)
 
-            return calendar.to_dict(), 201
+            return self.to_dict(calendar), 201
 
 
 @api.route('/<int:pkId>')
@@ -50,7 +50,7 @@ class CalendarApiPK(BaseApiPK):
     """
     Handle
     """
-    model = BaseDao(Calendar)
+    dao = BaseDao(Calendar)
 
     @api.doc('get calendar record')
     @api.marshal_with(CalendarApiSchema, skip_none=True)
