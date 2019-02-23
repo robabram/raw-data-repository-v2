@@ -1,8 +1,8 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Enum, UniqueConstraint
+from sqlalchemy import Column, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import relationship
 
-from rdr_server.common.system_enums import MetricSetType, MetricsKey
-from rdr_server.model.base_model import BaseMetricsModel, ModelMixin, UTCDateTime
+from rdr_server.common.enums import MetricSetType, MetricsKey
+from rdr_server.model.base_model import BaseMetricsModel, ModelMixin, UTCDateTime, ModelEnum
 
 
 class MetricSet(BaseMetricsModel, ModelMixin):
@@ -13,7 +13,7 @@ class MetricSet(BaseMetricsModel, ModelMixin):
     __tablename__ = 'metric_set'
 
     metricSetId = Column('metric_set_id', String(50), unique=True)
-    metricSetType = Column('metric_set_type', Enum(MetricSetType), nullable=False)
+    metricSetType = Column('metric_set_type', ModelEnum(MetricSetType), nullable=False)
     lastModified = Column('last_modified', UTCDateTime, nullable=False)
     metrics = relationship('AggregateMetrics', cascade='all, delete-orphan', passive_deletes=True)
 
@@ -24,7 +24,7 @@ class AggregateMetrics(BaseMetricsModel, ModelMixin):
 
     metricSetId = Column('metric_set_id', String(50),
                          ForeignKey('metric_set.metric_set_id', ondelete='CASCADE'))
-    metricsKey = Column('metrics_key', Enum(MetricsKey))
+    metricsKey = Column('metrics_key', ModelEnum(MetricsKey))
     value = Column('value', String(50))
     count = Column('count', Integer, nullable=False)
 

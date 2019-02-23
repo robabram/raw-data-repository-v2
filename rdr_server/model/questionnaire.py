@@ -1,9 +1,9 @@
-from sqlalchemy import Column, Integer, BigInteger, String, ForeignKeyConstraint, Boolean, Enum, JSON
+from sqlalchemy import Column, Integer, BigInteger, String, ForeignKeyConstraint, Boolean, JSON
 from sqlalchemy import UniqueConstraint, ForeignKey
 from sqlalchemy.orm import relationship
 
-from rdr_server.common.system_enums import QuestionnaireDefinitionStatus
-from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
+from rdr_server.common.enums import QuestionnaireDefinitionStatus
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime, ModelEnum
 
 
 class QuestionnaireBase(ModelMixin):
@@ -18,7 +18,7 @@ class QuestionnaireBase(ModelMixin):
     # The JSON representation of the questionnaire provided by the client.
     # Concepts and questions can be be parsed out of this for use in querying.
     resource = Column('resource', JSON, nullable=False)
-    status = Column('status', Enum(QuestionnaireDefinitionStatus),
+    status = Column('status', ModelEnum(QuestionnaireDefinitionStatus),
                     default=QuestionnaireDefinitionStatus.VALID)
 
     # def asdict_with_children(self):

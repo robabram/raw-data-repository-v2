@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey
 
-from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
-from rdr_server.common.system_enums import SampleStatus
+from rdr_server.common.enums import SampleStatus
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime, ModelEnum
 
 
 class BiobankStoredSample(ModelMixin, BaseModel):
@@ -61,7 +61,7 @@ class BiobankStoredSample(ModelMixin, BaseModel):
     # created = Column('created', UTCDateTime)
 
     # sample status, includes all the statuses from SampleStatus Enum.
-    status = Column('status', Enum(SampleStatus), default=SampleStatus.RECEIVED)
+    status = Column('status', ModelEnum(SampleStatus), default=SampleStatus.RECEIVED)
 
     # Timestamp sample was disposed.
     disposed = Column('disposed', UTCDateTime)

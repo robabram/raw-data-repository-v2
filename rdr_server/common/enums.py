@@ -1,5 +1,5 @@
 import json
-from enum import IntEnum
+from enum import Enum
 
 from dateutil.relativedelta import relativedelta
 
@@ -27,7 +27,7 @@ TEST_HPO_ID = 19
 TEST_LOGIN_PHONE_NUMBER_PREFIX = '444'
 
 
-class Operator(IntEnum):
+class Operator(Enum):
     EQUALS = 0  # Case insensitive comparison for strings, exact comparison otherwise
     LESS_THAN = 1
     GREATER_THAN = 2
@@ -37,7 +37,7 @@ class Operator(IntEnum):
     # Note: we don't support contains or exact string comparison at this stage
 
 
-class PropertyType(IntEnum):
+class PropertyType(Enum):
     STRING = 0
     DATE = 1
     DATETIME = 2
@@ -46,34 +46,34 @@ class PropertyType(IntEnum):
     CODE = 5
 
 
-class SiteStatus(IntEnum):
+class SiteStatus(Enum):
     """ The active scheduling status of a site. """
     UNSET = 0
     ACTIVE = 1
     INACTIVE = 2
 
 
-class EnrollingStatus(IntEnum):
+class EnrollingStatus(Enum):
     """ The actively enrolling status of a site. """
     UNSET = 0
     ACTIVE = 1
     INACTIVE = 2
 
 
-class DigitalSchedulingStatus(IntEnum):
+class DigitalSchedulingStatus(Enum):
     """ The status of a sites digital scheduling capability. """
     UNSET = 0
     ACTIVE = 1
     INACTIVE = 2
 
 
-class ObsoleteStatus(IntEnum):
+class ObsoleteStatus(Enum):
     """ If an organization is obsolete but referenced in other tables. """
     ACTIVE = 0
     OBSOLETE = 1
 
 
-class CodeType(IntEnum):
+class CodeType(Enum):
     """A type of code"""
     MODULE = 1
     TOPIC = 2
@@ -81,14 +81,14 @@ class CodeType(IntEnum):
     ANSWER = 4
 
 
-class PhysicalMeasurementsStatus(IntEnum):
+class PhysicalMeasurementsStatus(Enum):
     """The state of the participant's physical measurements."""
     UNSET = 0
     COMPLETED = 1
     CANCELLED = 2
 
 
-class QuestionnaireStatus(IntEnum):
+class QuestionnaireStatus(Enum):
     """The status of a given questionnaire for this participant"""
     UNSET = 0
     SUBMITTED = 1
@@ -97,20 +97,20 @@ class QuestionnaireStatus(IntEnum):
     SUBMITTED_INVALID = 4
 
 
-class QuestionnaireDefinitionStatus(IntEnum):
+class QuestionnaireDefinitionStatus(Enum):
     """ If a questionnaire has been determined to be invalid"""
     VALID = 0
     INVALID = 1
 
 
-class EnrollmentStatus(IntEnum):
+class EnrollmentStatus(Enum):
     """A status reflecting how fully enrolled a participant is"""
     INTERESTED = 1
     MEMBER = 2
     FULL_PARTICIPANT = 3
 
 
-class SampleStatus(IntEnum):
+class SampleStatus(Enum):
     """Status of biobank samples"""
     UNSET = 0
     RECEIVED = 1
@@ -163,7 +163,7 @@ def get_sample_status_enum_value(status):
     return SampleStatus.UNKNOWN
 
 
-class OrderStatus(IntEnum):
+class OrderStatus(Enum):
     """Status of biobank orders and samples"""
     UNSET = 0
     CREATED = 1
@@ -172,19 +172,19 @@ class OrderStatus(IntEnum):
     FINALIZED = 4
 
 
-class BiobankOrderStatus(IntEnum):
+class BiobankOrderStatus(Enum):
     """ The status of a biobank order: amended/cancelled """
     UNSET = 0
     AMENDED = 1
     CANCELLED = 2
 
 
-class MetricSetType(IntEnum):
+class MetricSetType(Enum):
     """Type determining the schema for a metric set."""
     PUBLIC_PARTICIPANT_AGGREGATIONS = 1
 
 
-class MetricsKey(IntEnum):
+class MetricsKey(Enum):
     """Key for a metrics set metric aggregation."""
     GENDER = 1
     RACE = 2
@@ -198,7 +198,7 @@ class MetricsKey(IntEnum):
     ENROLLMENT_STATUS = 10
 
 
-class Stratifications(IntEnum):
+class Stratifications(Enum):
     """Variables by which participant counts can be stacked"""
     TOTAL = 1
     ENROLLMENT_STATUS = 2
@@ -227,7 +227,7 @@ METRIC_SET_KEYS = {
 
 # These race values are derived from one or more answers to the race/ethnicity question
 # in questionnaire responses.
-class Race(IntEnum):
+class Race(Enum):
     UNSET = 0
     PMI_Skip = 1
     # UNMAPPED = 2 -- Not actually in use.
@@ -248,7 +248,7 @@ class Race(IntEnum):
 
 
 # A type of organization responsible for signing up participants.
-class OrganizationType(IntEnum):
+class OrganizationType(Enum):
     UNSET = 0
     # Healthcare Provider Organization
     HPO = 1
@@ -278,13 +278,13 @@ ANSWER_CODE_TO_RACE = {
 }
 
 
-class WithdrawalStatus(IntEnum):
+class WithdrawalStatus(Enum):
     """Whether a participant has withdrawn from the study."""
     NOT_WITHDRAWN = 1
     NO_USE = 2
 
 
-class WithdrawalReason(IntEnum):
+class WithdrawalReason(Enum):
     """Whether a participant has been administratively withdrawn from the study.
        If value is UNSET it mean that a participant went through the normal withdrawal process."""
     UNSET = 0
@@ -293,7 +293,7 @@ class WithdrawalReason(IntEnum):
     TEST = 3
 
 
-class SuspensionStatus(IntEnum):
+class SuspensionStatus(Enum):
     """Whether a participant has been suspended from the study."""
     NOT_SUSPENDED = 1
     NO_CONTACT = 2

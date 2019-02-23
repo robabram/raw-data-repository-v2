@@ -1,11 +1,10 @@
-from sqlalchemy import Column, Integer, String, UnicodeText, Boolean, UniqueConstraint, Enum
+from sqlalchemy import Column, Integer, String, UnicodeText, Boolean, UniqueConstraint
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import backref, relationship
-from marshmallow_sqlalchemy import ModelSchema
 
-from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
-from rdr_server.common.system_enums import CodeType
+from rdr_server.common.enums import CodeType
+from rdr_server.model.base_model import BaseModel, ModelMixin, ModelEnum
 
 
 class CodeBook(ModelMixin, BaseModel):
@@ -45,7 +44,7 @@ class _CodeBase(ModelMixin):
     shortValue = Column('short_value', String(50))
     display = Column('display', UnicodeText)
     topic = Column('topic', UnicodeText)
-    codeType = Column('code_type', Enum(CodeType), nullable=False)
+    codeType = Column('code_type', ModelEnum(CodeType), nullable=False)
     mapped = Column('mapped', Boolean, nullable=False)
     # created = Column('created', UTCDateTime, nullable=False)
 

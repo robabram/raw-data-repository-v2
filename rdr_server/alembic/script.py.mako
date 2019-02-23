@@ -8,7 +8,9 @@ Create Date: ${create_date}
 from alembic import op
 import sqlalchemy as sa
 ${imports if imports else ""}
-from rdr_server.model.base_model import UTCDateTime
+from rdr_server.common.enums import *
+from rdr_server.model.base_model import UTCDateTime, ModelEnum
+
 
 # revision identifiers, used by Alembic.
 revision = ${repr(up_revision)}

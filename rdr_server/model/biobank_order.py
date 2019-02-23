@@ -1,9 +1,10 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, UnicodeText, UniqueConstraint, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, UnicodeText, UniqueConstraint
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
 
-from rdr_server.common.system_enums import BiobankOrderStatus
+from rdr_server.common.enums import BiobankOrderStatus
 from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
+from rdr_server.model.base_model import ModelEnum
 
 
 class BiobankOrderBase(ModelMixin):
@@ -41,7 +42,7 @@ class BiobankOrderBase(ModelMixin):
     # orderstatus can be cancelled/amended/restored
     # A null value or UNSET == finalized (i.e. the current accepted value)
 
-    orderStatus = Column('order_status', Enum(BiobankOrderStatus))
+    orderStatus = Column('order_status', ModelEnum(BiobankOrderStatus))
     # a cancelled or edited order must have a reason. Set on the old row because cancelled orders
     # don't create a new row like amended orders do.
     amendedReason = Column('amended_reason', UnicodeText)

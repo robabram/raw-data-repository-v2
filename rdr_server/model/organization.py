@@ -1,8 +1,8 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-from rdr_server.common.system_enums import ObsoleteStatus
-from rdr_server.model.base_model import BaseModel, ModelMixin
+from rdr_server.common.enums import ObsoleteStatus
+from rdr_server.model.base_model import BaseModel, ModelMixin, ModelEnum
 
 
 class Organization(ModelMixin, BaseModel):
@@ -19,4 +19,4 @@ class Organization(ModelMixin, BaseModel):
     hpoId = Column('hpo_id', Integer, ForeignKey('hpo.hpo_id'), nullable=False)
     # Sites belonging to this organization.
     sites = relationship('Site', cascade='all, delete-orphan', order_by='Site.googleGroup')
-    isObsolete = Column('is_obsolete', Enum(ObsoleteStatus))
+    isObsolete = Column('is_obsolete', ModelEnum(ObsoleteStatus))

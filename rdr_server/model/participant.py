@@ -1,9 +1,9 @@
-from sqlalchemy import Column, Integer, BLOB, ForeignKey, Index, String, UnicodeText, BigInteger, Boolean, Enum
+from sqlalchemy import Column, Integer, BLOB, ForeignKey, Index, String, UnicodeText, BigInteger, Boolean
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
 
-from rdr_server.common.system_enums import WithdrawalStatus, SuspensionStatus, WithdrawalReason
-from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
+from rdr_server.common.enums import WithdrawalStatus, SuspensionStatus, WithdrawalReason
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime, ModelEnum
 
 
 class ParticipantBase(ModelMixin):
@@ -35,16 +35,16 @@ class ParticipantBase(ModelMixin):
     # defaults here) to simplify insert v. update semantics.
     # Withdrawal is permanent, and indicates we should neither contact the participant nor use their
     # data in the future.
-    withdrawalStatus = Column('withdrawal_status', Enum(WithdrawalStatus), nullable=False)
+    withdrawalStatus = Column('withdrawal_status', ModelEnum(WithdrawalStatus), nullable=False)
 
     # The time at which the participants set their withdrawal status to NO_USE.
     withdrawalTime = Column('withdrawal_time', UTCDateTime)
 
-    withdrawalReason = Column('withdrawal_reason', Enum(WithdrawalReason))
+    withdrawalReason = Column('withdrawal_reason', ModelEnum(WithdrawalReason))
     withdrawalReasonJustification = Column('withdrawal_reason_justification', UnicodeText)
     # Suspension may be temporary, and indicates we should not contact the participant but may
     # continue using their data.
-    suspensionStatus = Column('suspension_status', Enum(SuspensionStatus), nullable=False)
+    suspensionStatus = Column('suspension_status', ModelEnum(SuspensionStatus), nullable=False)
 
     # The time at which the participant set their suspension status to NO_CONTACT.
     suspensionTime = Column('suspension_time', UTCDateTime)

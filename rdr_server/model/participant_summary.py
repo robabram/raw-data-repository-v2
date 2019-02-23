@@ -1,14 +1,14 @@
 import datetime
 
 from sqlalchemy import Column, Integer, String, Date, ForeignKey, SmallInteger, \
-    UnicodeText, Enum
+    UnicodeText
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
 
-from rdr_server.common.system_enums import EnrollmentStatus, Race, SampleStatus, OrderStatus, \
+from rdr_server.common.enums import EnrollmentStatus, Race, SampleStatus, OrderStatus, \
     PhysicalMeasurementsStatus, QuestionnaireStatus, WithdrawalStatus, SuspensionStatus, \
     WithdrawalReason
-from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime, ModelEnum
 
 # The only fields that can be returned, queried on, or ordered by for queries for withdrawn
 # participants.
@@ -63,11 +63,11 @@ class ParticipantSummary(ModelMixin, BaseModel):
     sexualOrientationId = Column('sexual_orientation_id', Integer, ForeignKey('code.code_id'))
     educationId = Column('education_id', Integer, ForeignKey('code.code_id'))
     incomeId = Column('income_id', Integer, ForeignKey('code.code_id'))
-    enrollmentStatus = Column('enrollment_status', Enum(EnrollmentStatus),
+    enrollmentStatus = Column('enrollment_status', ModelEnum(EnrollmentStatus),
                               default=EnrollmentStatus.INTERESTED)
-    race = Column('race', Enum(Race), default=Race.UNSET)
+    race = Column('race', ModelEnum(Race), default=Race.UNSET)
     physicalMeasurementsStatus = Column('physical_measurements_status',
-                                        Enum(PhysicalMeasurementsStatus),
+                                        ModelEnum(PhysicalMeasurementsStatus),
                                         default=PhysicalMeasurementsStatus.UNSET)
     # The first time that physical measurements were submitted for the participant.
     physicalMeasurementsTime = Column('physical_measurements_time', UTCDateTime)
@@ -91,130 +91,130 @@ class ParticipantSummary(ModelMixin, BaseModel):
 
     # Fields for which questionnaires have been submitted, and at what times.
     consentForStudyEnrollment = Column('consent_for_study_enrollment',
-                                       Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                       ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     consentForStudyEnrollmentTime = Column('consent_for_study_enrollment_time', UTCDateTime)
     consentForElectronicHealthRecords = Column('consent_for_electronic_health_records',
-                                               Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                               ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     consentForElectronicHealthRecordsTime = Column('consent_for_electronic_health_records_time',
                                                    UTCDateTime)
     consentForDvElectronicHealthRecordsSharing = Column(
-        'consent_for_dv_electronic_health_records_sharing', Enum(QuestionnaireStatus),
+        'consent_for_dv_electronic_health_records_sharing', ModelEnum(QuestionnaireStatus),
         default=QuestionnaireStatus.UNSET)
     consentForDvElectronicHealthRecordsSharingTime = Column(
         'consent_for_dv_electronic_health_records_sharing_time', UTCDateTime)
     consentForCABoR = Column('consent_for_cabor',
-                             Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                             ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     consentForCABoRTime = Column('consent_for_cabor_time', UTCDateTime)
     questionnaireOnOverallHealth = Column('questionnaire_on_overall_health',
-                                          Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                          ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     questionnaireOnOverallHealthTime = Column('questionnaire_on_overall_health_time', UTCDateTime)
     questionnaireOnLifestyle = Column('questionnaire_on_lifestyle',
-                                      Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                      ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     questionnaireOnLifestyleTime = Column('questionnaire_on_lifestyle_time', UTCDateTime)
     questionnaireOnTheBasics = Column('questionnaire_on_the_basics',
-                                      Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                      ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     questionnaireOnTheBasicsTime = Column('questionnaire_on_the_basics_time', UTCDateTime)
     questionnaireOnHealthcareAccess = Column('questionnaire_on_healthcare_access',
-                                             Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                             ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     questionnaireOnHealthcareAccessTime = Column('questionnaire_on_healthcare_access_time',
                                                  UTCDateTime)
     questionnaireOnMedicalHistory = Column('questionnaire_on_medical_history',
-                                           Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                           ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     questionnaireOnMedicalHistoryTime = Column('questionnaire_on_medical_history_time', UTCDateTime)
     questionnaireOnMedications = Column('questionnaire_on_medications',
-                                        Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                        ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     questionnaireOnMedicationsTime = Column('questionnaire_on_medications_time', UTCDateTime)
     questionnaireOnFamilyHealth = Column('questionnaire_on_family_health',
-                                         Enum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
+                                         ModelEnum(QuestionnaireStatus), default=QuestionnaireStatus.UNSET)
     questionnaireOnFamilyHealthTime = Column('questionnaire_on_family_health_time', UTCDateTime)
 
     # Fields for which samples have been received, and at what times.
-    sampleStatus1SST8 = Column('sample_status_1sst8', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1SST8 = Column('sample_status_1sst8', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1SST8Time = Column('sample_status_1sst8_time', UTCDateTime)
-    sampleStatus2SST8 = Column('sample_status_2sst8', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus2SST8 = Column('sample_status_2sst8', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus2SST8Time = Column('sample_status_2sst8_time', UTCDateTime)
-    sampleStatus1SS08 = Column('sample_status_1ss08', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1SS08 = Column('sample_status_1ss08', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1SS08Time = Column('sample_status_1ss08_time', UTCDateTime)
-    sampleStatus1PST8 = Column('sample_status_1pst8', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1PST8 = Column('sample_status_1pst8', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1PST8Time = Column('sample_status_1pst8_time', UTCDateTime)
-    sampleStatus2PST8 = Column('sample_status_2pst8', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus2PST8 = Column('sample_status_2pst8', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus2PST8Time = Column('sample_status_2pst8_time', UTCDateTime)
-    sampleStatus1PS08 = Column('sample_status_1ps08', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1PS08 = Column('sample_status_1ps08', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1PS08Time = Column('sample_status_1ps08_time', UTCDateTime)
-    sampleStatus1HEP4 = Column('sample_status_1hep4', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1HEP4 = Column('sample_status_1hep4', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1HEP4Time = Column('sample_status_1hep4_time', UTCDateTime)
-    sampleStatus1ED04 = Column('sample_status_1ed04', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1ED04 = Column('sample_status_1ed04', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1ED04Time = Column('sample_status_1ed04_time', UTCDateTime)
-    sampleStatus1ED10 = Column('sample_status_1ed10', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1ED10 = Column('sample_status_1ed10', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1ED10Time = Column('sample_status_1ed10_time', UTCDateTime)
-    sampleStatus2ED10 = Column('sample_status_2ed10', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus2ED10 = Column('sample_status_2ed10', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus2ED10Time = Column('sample_status_2ed10_time', UTCDateTime)
-    sampleStatus1UR10 = Column('sample_status_1ur10', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1UR10 = Column('sample_status_1ur10', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1UR10Time = Column('sample_status_1ur10_time', UTCDateTime)
-    sampleStatus1UR90 = Column('sample_status_1ur90', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1UR90 = Column('sample_status_1ur90', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1UR90Time = Column('sample_status_1ur90_time', UTCDateTime)
-    sampleStatus1SAL = Column('sample_status_1sal', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1SAL = Column('sample_status_1sal', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1SALTime = Column('sample_status_1sal_time', UTCDateTime)
-    sampleStatus1SAL2 = Column('sample_status_1sal2', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1SAL2 = Column('sample_status_1sal2', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1SAL2Time = Column('sample_status_1sal2_time', UTCDateTime)
-    sampleStatus1ED02 = Column('sample_status_1ed02', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1ED02 = Column('sample_status_1ed02', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1ED02Time = Column('sample_status_1ed02_time', UTCDateTime)
-    sampleStatus1CFD9 = Column('sample_status_1cfd9', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1CFD9 = Column('sample_status_1cfd9', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1CFD9Time = Column('sample_status_1cfd9_time', UTCDateTime)
-    sampleStatus1PXR2 = Column('sample_status_1pxr2', Enum(SampleStatus), default=SampleStatus.UNSET)
+    sampleStatus1PXR2 = Column('sample_status_1pxr2', ModelEnum(SampleStatus), default=SampleStatus.UNSET)
     sampleStatus1PXR2Time = Column('sample_status_1pxr2_time', UTCDateTime)
 
     # Fields for which samples have been ordered, and at what times.
-    sampleOrderStatus1SST8 = Column('sample_order_status_1sst8', Enum(OrderStatus),
+    sampleOrderStatus1SST8 = Column('sample_order_status_1sst8', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1SST8Time = Column('sample_order_status_1sst8_time', UTCDateTime)
-    sampleOrderStatus2SST8 = Column('sample_order_status_2sst8', Enum(OrderStatus),
+    sampleOrderStatus2SST8 = Column('sample_order_status_2sst8', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus2SST8Time = Column('sample_order_status_2sst8_time', UTCDateTime)
-    sampleOrderStatus1SS08 = Column('sample_order_status_1ss08', Enum(OrderStatus),
+    sampleOrderStatus1SS08 = Column('sample_order_status_1ss08', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1SS08Time = Column('sample_order_status_1ss08_time', UTCDateTime)
-    sampleOrderStatus1PST8 = Column('sample_order_status_1pst8', Enum(OrderStatus),
+    sampleOrderStatus1PST8 = Column('sample_order_status_1pst8', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1PST8Time = Column('sample_order_status_1pst8_time', UTCDateTime)
-    sampleOrderStatus2PST8 = Column('sample_order_status_2pst8', Enum(OrderStatus),
+    sampleOrderStatus2PST8 = Column('sample_order_status_2pst8', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus2PST8Time = Column('sample_order_status_2pst8_time', UTCDateTime)
-    sampleOrderStatus1PS08 = Column('sample_order_status_1ps08', Enum(OrderStatus),
+    sampleOrderStatus1PS08 = Column('sample_order_status_1ps08', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1PS08Time = Column('sample_order_status_1ps08_time', UTCDateTime)
-    sampleOrderStatus1HEP4 = Column('sample_order_status_1hep4', Enum(OrderStatus),
+    sampleOrderStatus1HEP4 = Column('sample_order_status_1hep4', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1HEP4Time = Column('sample_order_status_1hep4_time', UTCDateTime)
-    sampleOrderStatus1ED04 = Column('sample_order_status_1ed04', Enum(OrderStatus),
+    sampleOrderStatus1ED04 = Column('sample_order_status_1ed04', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1ED04Time = Column('sample_order_status_1ed04_time', UTCDateTime)
-    sampleOrderStatus1ED10 = Column('sample_order_status_1ed10', Enum(OrderStatus),
+    sampleOrderStatus1ED10 = Column('sample_order_status_1ed10', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1ED10Time = Column('sample_order_status_1ed10_time', UTCDateTime)
-    sampleOrderStatus2ED10 = Column('sample_order_status_2ed10', Enum(OrderStatus),
+    sampleOrderStatus2ED10 = Column('sample_order_status_2ed10', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus2ED10Time = Column('sample_order_status_2ed10_time', UTCDateTime)
-    sampleOrderStatus1UR10 = Column('sample_order_status_1ur10', Enum(OrderStatus),
+    sampleOrderStatus1UR10 = Column('sample_order_status_1ur10', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1UR10Time = Column('sample_order_status_1ur10_time', UTCDateTime)
-    sampleOrderStatus1UR90 = Column('sample_order_status_1ur90', Enum(OrderStatus),
+    sampleOrderStatus1UR90 = Column('sample_order_status_1ur90', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1UR90Time = Column('sample_order_status_1ur90_time', UTCDateTime)
-    sampleOrderStatus1SAL = Column('sample_order_status_1sal', Enum(OrderStatus),
+    sampleOrderStatus1SAL = Column('sample_order_status_1sal', ModelEnum(OrderStatus),
                                    default=OrderStatus.UNSET)
     sampleOrderStatus1SALTime = Column('sample_order_status_1sal_time', UTCDateTime)
-    sampleOrderStatus1SAL2 = Column('sample_order_status_1sal2', Enum(OrderStatus),
+    sampleOrderStatus1SAL2 = Column('sample_order_status_1sal2', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1SAL2Time = Column('sample_order_status_1sal2_time', UTCDateTime)
 
-    sampleOrderStatus1ED02 = Column('sample_order_status_1ed02', Enum(OrderStatus),
+    sampleOrderStatus1ED02 = Column('sample_order_status_1ed02', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1ED02Time = Column('sample_order_status_1ed02_time', UTCDateTime)
-    sampleOrderStatus1CFD9 = Column('sample_order_status_1cfd9', Enum(OrderStatus),
+    sampleOrderStatus1CFD9 = Column('sample_order_status_1cfd9', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1CFD9Time = Column('sample_order_status_1cfd9_time', UTCDateTime)
-    sampleOrderStatus1PXR2 = Column('sample_order_status_1pxr2', Enum(OrderStatus),
+    sampleOrderStatus1PXR2 = Column('sample_order_status_1pxr2', ModelEnum(OrderStatus),
                                     default=OrderStatus.UNSET)
     sampleOrderStatus1PXR2Time = Column('sample_order_status_1pxr2_time', UTCDateTime)
 
@@ -225,11 +225,11 @@ class ParticipantSummary(ModelMixin, BaseModel):
     # The number of BiobankStoredSamples recorded for this participant, limited to those samples
     # where testCode is one of the baseline tests (listed in the config).
     numBaselineSamplesArrived = Column('num_baseline_samples_arrived', SmallInteger, default=0)
-    samplesToIsolateDNA = Column('samples_to_isolate_dna', Enum(SampleStatus),
+    samplesToIsolateDNA = Column('samples_to_isolate_dna', ModelEnum(SampleStatus),
                                  default=SampleStatus.UNSET)
     # Whether biospecimens have been finalized or not, and the time at which they were
     # finalized.
-    biospecimenStatus = Column('biospecimen_status', Enum(OrderStatus), default=OrderStatus.UNSET)
+    biospecimenStatus = Column('biospecimen_status', ModelEnum(OrderStatus), default=OrderStatus.UNSET)
     biospecimenOrderTime = Column('biospecimen_order_time', UTCDateTime)
     biospecimenSourceSiteId = Column('biospecimen_source_site_id', Integer,
                                      ForeignKey('site.site_id'))
@@ -243,17 +243,17 @@ class ParticipantSummary(ModelMixin, BaseModel):
     # Withdrawal from the study of the participant's own accord.
     withdrawalStatus = Column(
         'withdrawal_status',
-        Enum(WithdrawalStatus),
+        ModelEnum(WithdrawalStatus),
         nullable=False)
     withdrawalReason = Column(
         'withdrawal_reason',
-        Enum(WithdrawalReason))
+        ModelEnum(WithdrawalReason))
     withdrawalTime = Column('withdrawal_time', UTCDateTime)
     withdrawalReasonJustification = Column('withdrawal_reason_justification', UnicodeText)
 
     suspensionStatus = Column(
         'suspension_status',
-        Enum(SuspensionStatus),
+        ModelEnum(SuspensionStatus),
         nullable=False)
     suspensionTime = Column('suspension_time', UTCDateTime)
 

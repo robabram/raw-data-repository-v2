@@ -13,7 +13,7 @@ from sqlalchemy import inspect
 from sqlalchemy.dialects.mysql import DATETIME
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.types import TypeDecorator
+from sqlalchemy.types import TypeDecorator, SmallInteger
 
 # Do not use the cls=xxxx parameter, create a mixin class and add them directly
 # to the models.
@@ -24,12 +24,22 @@ BaseModel = declarative_base(metadata=MetaData(schema='rdrv2'))
 BaseMetricsModel = declarative_base(metadata=MetaData(schema='metricsv2'))
 
 
-def json_serial(obj):
-    """JSON serializer for objects not serializable by default json code"""
+class ModelEnum(TypeDecorator):
+    """A type for a SQLAlchemy column based on a protomsg Enum provided in the constructor"""
+    impl = SmallInteger
 
-    if isinstance(obj, (datetime, date)):
-        return obj.isoformat()
-    return obj.__repr__()
+    def __init__(self, enum_type):
+        super(ModelEnum, self).__init__()
+        self.enum_type = enum_type
+
+    def __repr__(self):
+        return "ModelEnum(%s)" % self.enum_type.__name__
+
+    def process_bind_param(self, value, dialect):  # pylint: disable=unused-argument
+        return int(value) if value else None
+
+    def process_result_value(self, value, dialect):  # pylint: disable=unused-argument
+        return self.enum_type(value) if value else None
 
 
 class UTCDateTime(TypeDecorator):
@@ -59,6 +69,7 @@ class ModelMixin(object):
     Base Mixin for all models. Includes methods for importing/exporting JSON data.
     """
 
+    # TODO: Remove if we don't end up using marshmallow.
     __marshmallow__: Schema()
 
     @declared_attr
@@ -80,6 +91,8 @@ class ModelMixin(object):
 
         # TODO: This method needs work to fit with sqlachemey, may need return a new clean object.
 
+        # TODO: Needs to identify ModelEnum fields and set the Enum value from a string.
+
         """
         if args is not None and len(args) is not 0 and args[0] is not None:
             for key, value in args[0].items():
@@ -91,13 +104,27 @@ class ModelMixin(object):
                 self.__dict__[key] = value
                 # print('{0} : {1}'.format(key, value))
 
-    def to_json(self):
+    def to_json(self, pretty=False):
         """
         Dump class to json string
         :return: json string
         """
+
+        def json_serial(obj):
+            """JSON serializer for objects not serializable by default json code"""
+
+            if isinstance(obj, (datetime, date)):
+                return obj.isoformat()
+            return obj.__repr__()
+
         data = self.to_dict()
-        return json.dumps(data, default=json_serial)
+
+        if pretty:
+            output = json.dumps(data, default=json_serial, indent=4)
+        else:
+            output = json.dumps(data, default=json_serial)
+
+        return output
 
     def to_dict(self):
         """
@@ -113,6 +140,9 @@ class ModelMixin(object):
 
             if isinstance(value, (datetime, date)):
                 data[key] = value.isoformat()
+            # Check for ModelEnum and return name
+            elif hasattr(value, 'name') and hasattr(value, 'value'):
+                data[key] = value.name
             else:
                 data[key] = value
 

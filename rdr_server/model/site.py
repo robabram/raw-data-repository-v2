@@ -1,7 +1,7 @@
-from rdr_server.common.system_enums import SiteStatus, EnrollingStatus, DigitalSchedulingStatus, ObsoleteStatus
-from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, UnicodeText, Enum
+from rdr_server.common.enums import SiteStatus, EnrollingStatus, DigitalSchedulingStatus, ObsoleteStatus
+from sqlalchemy import Column, Integer, String, Date, Float, ForeignKey, UnicodeText
 
-from rdr_server.model.base_model import BaseModel, ModelMixin
+from rdr_server.model.base_model import BaseModel, ModelMixin, ModelEnum
 
 
 class Site(ModelMixin, BaseModel):
@@ -17,9 +17,9 @@ class Site(ModelMixin, BaseModel):
     # Deprecated; this is being replaced by organizationId.
     hpoId = Column('hpo_id', Integer, ForeignKey('hpo.hpo_id'))
 
-    siteStatus = Column('site_status', Enum(SiteStatus))
-    enrollingStatus = Column('enrolling_status', Enum(EnrollingStatus))
-    digitalSchedulingStatus = Column('digital_scheduling_status', Enum(DigitalSchedulingStatus))
+    siteStatus = Column('site_status', ModelEnum(SiteStatus))
+    enrollingStatus = Column('enrolling_status', ModelEnum(EnrollingStatus))
+    digitalSchedulingStatus = Column('digital_scheduling_status', ModelEnum(DigitalSchedulingStatus))
     scheduleInstructions = Column('schedule_instructions', String(2048))
     scheduleInstructions_ES = Column('schedule_instructions_es', String(2048))
     launchDate = Column('launch_date', Date)
@@ -38,4 +38,4 @@ class Site(ModelMixin, BaseModel):
     phoneNumber = Column('phone_number', String(80))
     adminEmails = Column('admin_emails', String(4096))
     link = Column('link', String(255))
-    isObsolete = Column('is_obsolete', Enum(ObsoleteStatus))
+    isObsolete = Column('is_obsolete', ModelEnum(ObsoleteStatus))

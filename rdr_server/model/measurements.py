@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Boolean, Integer, BLOB, BIGINT, ForeignKey, String, Float, Table, \
-    Text, UnicodeText, Enum
+    Text, UnicodeText
 from sqlalchemy.orm import relationship
 
-from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime
-from rdr_server.common.system_enums import PhysicalMeasurementsStatus
+from rdr_server.model.base_model import BaseModel, ModelMixin, UTCDateTime, ModelEnum
+from rdr_server.common.enums import PhysicalMeasurementsStatus
 
 measurement_to_qualifier = Table('measurement_to_qualifier', BaseModel.metadata,
                                  Column('measurement_id', BIGINT, ForeignKey('measurement.measurement_id'),
@@ -38,7 +38,7 @@ class PhysicalMeasurements(ModelMixin, BaseModel):
     logPosition = relationship('LogPosition')
     finalized = Column('finalized', UTCDateTime)
     # Restored/amended measurements will be UNSET.
-    status = Column('status', Enum(PhysicalMeasurementsStatus))
+    status = Column('status', ModelEnum(PhysicalMeasurementsStatus))
     cancelledUsername = Column('cancelled_username', String(255))
     cancelledSiteId = Column('cancelled_site_id', Integer, ForeignKey('site.site_id'))
     cancelledTime = Column('cancelled_time', UTCDateTime)
