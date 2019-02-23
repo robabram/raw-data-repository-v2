@@ -14,7 +14,7 @@ from sqlalchemy.exc import IntegrityError
 
 from rdr_server.dao.base_dao import BaseDao
 from rdr_server.dao.exceptions import RecordNotFoundError
-from rdr_server.model.base_model import ModelMixin, ModelEnum
+from rdr_server.model.base_model import ModelMixin
 
 
 def response_handler(func):
@@ -55,7 +55,7 @@ class BaseDaoApi(Resource):
 
     def to_dict(self, data=None):
         """
-        Convert sqlalchemy models/result objects into a python dict
+        Convert sqlalchemy model/result objects into a python dict
         :param data: Result data
         :return: dict
         """
@@ -98,25 +98,6 @@ class BaseDaoApi(Resource):
 
         raise ValueError('invalid data, unable to convert to dict()')
 
-    def enum_to_string(self, enum):
-        """
-        Return the name string of the enum value
-        :param enum: Enum object
-        :return: String
-        """
-        value = enum.name
-        return value
-
-    def string_to_enum(self, enum, value):
-        """
-        Return the enum value for a given enum and name string
-        :param enum: Enum object
-        :param value: Enum item name string
-        :return: Enum object
-        """
-        value = enum[value]
-        return value
-
     def result_to_dict(self, result):
         """
         A Result is row data returned from a custom query.
@@ -130,14 +111,11 @@ class BaseDaoApi(Resource):
             value = getattr(result, key)
             if isinstance(value, (datetime, date)):
                 od[key] = value.isoformat()
-            # Check for ModelEnum and return name
+            # Check for ModelEnum and set value name string
             elif hasattr(value, 'name') and hasattr(value, 'value'):
                 od[key] = value.name
             else:
                 od[key] = value
-
-            # see if this field is an Enum
-            pass
 
         return od
 
@@ -150,24 +128,23 @@ class BaseDaoApi(Resource):
         # to_dict() already handles converting dates and enums
         data = model.to_dict()
 
-        x = self.dict_to_model(data)
-
         return data
 
     def dict_to_model(self, data):
-
-        # TODO: Create empty model obj, inspect and look for Enums.
-        #  Convert Enum strings to IDs. Insert data into new model and return.
-
+        """
+        Take a dict from an API request and convert it into a model
+        :param data: request payload data dict
+        :return: Model
+        """
         od = OrderedDict()
-        model = self.dao.model()
-        info = inspect(model)
+        info = inspect(self.dao.model())
         mod = None
 
         for key, value in data.items():
-
+            # Find out what class types are associated with this column.
             class_str = str(info.mapper.columns[key].base_columns)
 
+            # If ModelEnum is found, convert string value to Enum value.
             if 'ModelEnum' in class_str:
                 match = re.match('.*?, ModelEnum\((.*?)\).*', class_str)
                 enum_name = match.groups()[0]
@@ -175,18 +152,16 @@ class BaseDaoApi(Resource):
                 if mod is None:
                     mod = importlib.import_module('rdr_server.common.enums')
 
+                # TODO: Create new Exception and raise it if this fails.
                 enum = eval('mod.{0}'.format(enum_name))
 
                 od[key] = enum[value]
             else:
+                # We don't worry about Date or DateTime values, the UTCDateTime decorator
+                # takes care of it.
                 od[key] = value
 
         return od
-
-
-
-
-
 
 
 class BaseApiCount(BaseDaoApi):
@@ -227,8 +202,6 @@ class BaseApiSync(BaseDaoApi):
         data = self.dao.base_fields()
         response = self.to_dict(data)
         return response
-
-# TODO: add PUT method
 
 
 class BaseApiPut(BaseDaoApi):
