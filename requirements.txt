@@ -5,56 +5,150 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 alembic==1.0.7
-aniso8601==4.1.0          # via flask-restplus
-asn1crypto==0.24.0        # via cryptography
+    # via -r requirements.in
+aniso8601==4.1.0
+    # via flask-restplus
+asn1crypto==0.24.0
+    # via cryptography
 backoff==1.8.0
-cachetools==3.1.0         # via google-auth
-certifi==2018.11.29       # via requests
-cffi==1.11.5              # via cryptography
-chardet==3.0.4            # via requests
-click==7.0                # via flask, pip-tools
+    # via -r requirements.in
+cachetools==3.1.0
+    # via google-auth
+certifi==2018.11.29
+    # via requests
+cffi==1.11.5
+    # via cryptography
+chardet==3.0.4
+    # via requests
+click==7.0
+    # via
+    #   flask
+    #   pip-tools
 cryptography==2.5
+    # via -r requirements.in
 dnspython==1.16.0
+    # via -r requirements.in
 faker==1.0.2
+    # via -r requirements.in
 fhirclient==3.2.0
+    # via -r requirements.in
 flask-restplus==0.12.1
+    # via -r requirements.in
 flask==1.0.2
-google-api-core==1.7.0    # via google-cloud-bigquery, google-cloud-core
-google-auth==1.6.2        # via google-api-core
+    # via
+    #   -r requirements.in
+    #   flask-restplus
+google-api-core==1.7.0
+    # via
+    #   google-cloud-bigquery
+    #   google-cloud-core
+google-auth==1.6.2
+    # via google-api-core
 google-cloud-bigquery==1.9.0
-google-cloud-core==0.29.1  # via google-cloud-bigquery
-google-resumable-media==0.3.2  # via google-cloud-bigquery
-googleapis-common-protos==1.5.6  # via google-api-core
+    # via -r requirements.in
+google-cloud-core==0.29.1
+    # via google-cloud-bigquery
+google-resumable-media==0.3.2
+    # via google-cloud-bigquery
+googleapis-common-protos==1.5.6
+    # via google-api-core
 googleappenginecloudstorageclient==1.9.22.1
+    # via
+    #   -r requirements.in
+    #   googleappenginepipeline
 googleappenginepipeline==1.9.22.1
-httplib2==0.12.0          # via oauth2client
-idna==2.8                 # via requests
-isodate==0.6.0            # via fhirclient
-itsdangerous==1.1.0       # via flask
-jinja2==2.10              # via flask
-jsonschema==2.6.0         # via flask-restplus
-mako==1.0.7               # via alembic
-markupsafe==1.1.0         # via jinja2, mako
+    # via -r requirements.in
+httplib2==0.12.0
+    # via oauth2client
+idna==2.8
+    # via requests
+isodate==0.6.0
+    # via fhirclient
+itsdangerous==1.1.0
+    # via flask
+jinja2==2.10
+    # via flask
+jsonschema==2.6.0
+    # via flask-restplus
+mako==1.0.7
+    # via alembic
+markupsafe==1.1.0
+    # via
+    #   jinja2
+    #   mako
 marshmallow-sqlalchemy==0.16.0
-marshmallow==2.18.1       # via marshmallow-sqlalchemy
+    # via -r requirements.in
+marshmallow==2.18.1
+    # via marshmallow-sqlalchemy
 mock==2.0.0
+    # via -r requirements.in
 mysqlclient==1.4.1
+    # via -r requirements.in
 oauth2client==4.1.3
+    # via -r requirements.in
 parameterized==0.6.3
-pbr==5.1.2                # via mock
+    # via -r requirements.in
+pbr==5.1.2
+    # via mock
 pip-tools==3.3.2
-protobuf==3.6.1           # via google-api-core, googleapis-common-protos
-pyasn1-modules==0.2.4     # via google-auth, oauth2client
-pyasn1==0.4.5             # via oauth2client, pyasn1-modules, rsa
-pycparser==2.19           # via cffi
-python-dateutil==2.8.0    # via alembic, faker
-python-editor==1.0.4      # via alembic
-pytz==2018.9              # via flask-restplus, google-api-core
-requests==2.21.0          # via fhirclient, google-api-core
-rsa==4.0                  # via google-auth, oauth2client
+    # via -r requirements.in
+protobuf==3.6.1
+    # via
+    #   google-api-core
+    #   googleapis-common-protos
+pyasn1-modules==0.2.4
+    # via
+    #   google-auth
+    #   oauth2client
+pyasn1==0.4.5
+    # via
+    #   oauth2client
+    #   pyasn1-modules
+    #   rsa
+pycparser==2.19
+    # via cffi
+python-dateutil==2.8.0
+    # via
+    #   alembic
+    #   faker
+python-editor==1.0.4
+    # via alembic
+pytz==2018.9
+    # via
+    #   flask-restplus
+    #   google-api-core
+requests==2.21.0
+    # via
+    #   fhirclient
+    #   google-api-core
+rsa==4.7
+    # via
+    #   google-auth
+    #   oauth2client
 simplejson==3.16.0
-six==1.12.0               # via cryptography, faker, flask-restplus, google-api-core, google-auth, google-resumable-media, isodate, mock, oauth2client, pip-tools, protobuf, python-dateutil
+    # via -r requirements.in
+six==1.12.0
+    # via
+    #   cryptography
+    #   faker
+    #   flask-restplus
+    #   google-api-core
+    #   google-auth
+    #   google-resumable-media
+    #   isodate
+    #   mock
+    #   oauth2client
+    #   pip-tools
+    #   protobuf
+    #   python-dateutil
 sqlalchemy==1.2.17
-text-unidecode==1.2       # via faker
-urllib3==1.24.1           # via requests
-werkzeug==0.14.1          # via flask
+    # via
+    #   -r requirements.in
+    #   alembic
+    #   marshmallow-sqlalchemy
+text-unidecode==1.2
+    # via faker
+urllib3==1.24.1
+    # via requests
+werkzeug==0.14.1
+    # via flask
